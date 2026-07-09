@@ -1,13 +1,17 @@
-# ローカル完結の「AI社員」一式。外部API不要。
+# ローカル完結の「AI社員」一式。外部API・外部クラウド不要。
 #
-#   1) 起動:          docker compose up -d ollama
-#   2) モデル取得:     docker compose exec ollama ollama pull qwen2.5:7b
-#   3) 対話開始:       docker compose run --rm agent
-#      （1回だけ:      docker compose run --rm agent python ollama_agent.py --once "sampleのファイル一覧を見せて"）
+# ■ かんたんGUIモード（ブラウザのチャット画面から使う。非エンジニア向け）
+#     docker compose up -d
+#     → ブラウザで http://localhost:3000 を開く
+#   詳しい手順は README.md を参照。
 #
-# GPU を使う場合は ollama サービスに deploy.resources.reservations.devices を追加してください。
+# ■ 開発者用CLIモード
+#     docker compose run --rm agent
+#
+# GPU を使う場合は ollama サービスに deploy.resources を追加してください。
 
 services:
+  # ① ローカルLLM本体
   ollama:
     image: ollama/ollama:latest
     ports:
@@ -16,8 +20,39 @@ services:
       - ollama_models:/root/.ollama
     restart: unless-stopped
 
+  # ② MCPサーバー（ファイル操作ツール）をOpenAPI化してGUIに橋渡し
+  mcpo:
+    build: .
+    command: ["mcpo", "--host", "0.0.0.0", "--port", "8000", "--", "python", "unified_mcp_server.py"]
+    environment:
+      WORKSPACE_ROOT: /app/workspace
+      ENABLE_RAG: ${ENABLE_RAG:-1}
+    volumes:
+      - ./workspace:/app/workspace
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  # ③ ブラウザのチャット画面（ChatGPT風GUI）
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    depends_on:
+      - ollama
+      - mcpo
+    ports:
+      - "3000:8080"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      WEBUI_AUTH: ${WEBUI_AUTH:-True}
+    volumes:
+      - open_webui_data:/app/backend/data
+    restart: unless-stopped
+
+  # ④（開発者用）CLIエージェント。GUIには不要なので通常は起動しない。
+  #     使うとき: docker compose run --rm agent
   agent:
     build: .
+    profiles: ["cli"]
     depends_on:
       - ollama
     environment:
@@ -26,10 +61,10 @@ services:
       WORKSPACE_ROOT: /app/workspace
       ENABLE_RAG: ${ENABLE_RAG:-1}
     volumes:
-      # ホスト側の作業フォルダを差し替えたいときはここを書き換える
       - ./workspace:/app/workspace
     stdin_open: true
     tty: true
 
 volumes:
   ollama_models:
+  open_webui_data:

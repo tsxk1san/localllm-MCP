@@ -1,6 +1,7 @@
 # === コア（サーバー + Ollamaホストの動作に必須） ===
 mcp>=1.2.0                 # MCPサーバー/ツール定義(FastMCP)
-ollama>=0.4.0             # ローカルLLMクライアント
+ollama>=0.4.0             # ローカルLLMクライアント(CLIホスト用)
+mcpo>=0.0.10             # MCPサーバーをOpenAPI化(GUI/Open WebUI連携用)
 
 # --- ファイル抽出（PDF/Office）。無くてもサーバーは起動するが該当形式は読めない ---
 pymupdf>=1.24.0          # PDF (fitz)
