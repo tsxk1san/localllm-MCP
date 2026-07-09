@@ -193,7 +193,7 @@ mcpo --port 8000 -- python unified_mcp_server.py
 
 - ファイル操作: `list_projects` `list_files` `read_file` `read_file_lines` `write_file` `patch_file` `search_in_files`
 - 意味検索(RAG): `search_docs` `read_document` `read_pages` `list_docs` `refresh_database` `check_update_status`
-- コード解析(tree-sitter・任意): `find_symbol` `find_references` `read_symbol` `index_symbols`
+- コード解析(tree-sitter): `find_symbol` `find_references` `read_symbol` `index_symbols`（MATLAB追加のみ `requirements-symbols.txt`）
 - 検証: `list_checks` `run_check`（`mcp_checks.json` で定義したコマンドのみ実行可）
 
 ## ツールを増やす
