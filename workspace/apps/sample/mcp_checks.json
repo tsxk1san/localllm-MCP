@@ -1,0 +1,7 @@
+{
+  "checks": {
+    "syntax": "python -m py_compile hello.py",
+    "run": "python hello.py"
+  },
+  "timeout": 30
+}

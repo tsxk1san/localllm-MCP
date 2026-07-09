@@ -1,0 +1,18 @@
+# === コア（サーバー + Ollamaホストの動作に必須） ===
+mcp>=1.2.0                 # MCPサーバー/ツール定義(FastMCP)
+ollama>=0.4.0             # ローカルLLMクライアント
+
+# --- ファイル抽出（PDF/Office）。無くてもサーバーは起動するが該当形式は読めない ---
+pymupdf>=1.24.0          # PDF (fitz)
+python-pptx>=0.6.23      # .pptx
+python-docx>=1.1.0       # .docx
+openpyxl>=3.1.0          # .xlsx
+xlrd>=2.0.1              # .xls（古い形式）
+
+# === RAG（意味検索）。ENABLE_RAG=0 なら不要。torch を含むため重い ===
+chromadb>=0.5.0
+sentence-transformers>=3.0.0
+
+# ※ シンボル解析(tree-sitter)は ABI 依存で環境を選ぶため別ファイルにしています:
+#      pip install -r requirements-symbols.txt
+#    未インストールでも find_symbol 等が無効化されるだけでサーバーは動きます。

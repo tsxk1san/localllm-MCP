@@ -1,0 +1,8 @@
+# シンボル解析（tree-sitter, 任意）
+# find_symbol / find_references / read_symbol / index_symbols を使いたいときだけ入れる。
+# tree-sitter 本体と言語バインディングのバージョン整合が必要。合わない場合はこのファイルを飛ばしてOK。
+tree-sitter>=0.23.0
+tree-sitter-python>=0.23.0
+tree-sitter-javascript>=0.23.0
+tree-sitter-typescript>=0.23.0
+# tree-sitter-matlab>=1.0.0   # MATLAB を解析したい場合のみ

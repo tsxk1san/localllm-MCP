@@ -1,0 +1,5 @@
+{
+  "_comment": "workspace_config.json にリネームすると読み込まれます（任意）。個人パスはコミットしないこと。",
+  "apps_only_projects": [],
+  "extra_rag_paths": {}
+}

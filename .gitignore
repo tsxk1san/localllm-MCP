@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# 環境設定（秘密を含みうる）
+.env
+workspace_config.json
+
+# 生成物・キャッシュ
+**/.chroma_db/
+**/.backups/
+*.log
+
+# OS / エディタ
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# 個人的・このプロジェクトと無関係なファイル（とも に渡すリポには含めない）
+tomo_chat_transcript.md
+reindex_nightly*.log
+scripts/
+test_unified_mcp.py
+
+# 作業データ（サンプル以外の実データはコミットしない運用を推奨）
+# workspace/apps/* をコミットしたくない場合は下を有効化:
+# workspace/apps/*
+# workspace/docs/*
+# !workspace/apps/sample/
+# !workspace/docs/sample/

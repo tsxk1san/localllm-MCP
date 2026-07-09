@@ -1,0 +1,35 @@
+# ローカル完結の「AI社員」一式。外部API不要。
+#
+#   1) 起動:          docker compose up -d ollama
+#   2) モデル取得:     docker compose exec ollama ollama pull qwen2.5:7b
+#   3) 対話開始:       docker compose run --rm agent
+#      （1回だけ:      docker compose run --rm agent python ollama_agent.py --once "sampleのファイル一覧を見せて"）
+#
+# GPU を使う場合は ollama サービスに deploy.resources.reservations.devices を追加してください。
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    restart: unless-stopped
+
+  agent:
+    build: .
+    depends_on:
+      - ollama
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:7b}
+      WORKSPACE_ROOT: /app/workspace
+      ENABLE_RAG: ${ENABLE_RAG:-1}
+    volumes:
+      # ホスト側の作業フォルダを差し替えたいときはここを書き換える
+      - ./workspace:/app/workspace
+    stdin_open: true
+    tty: true
+
+volumes:
+  ollama_models:

@@ -1,0 +1,11 @@
+.git
+.venv
+venv
+__pycache__
+*.pyc
+.env
+*.log
+**/.chroma_db
+**/.backups
+tomo_chat_transcript.md
+reindex_nightly*.log
