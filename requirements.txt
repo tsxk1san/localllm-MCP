@@ -10,10 +10,13 @@ python-docx>=1.1.0       # .docx
 openpyxl>=3.1.0          # .xlsx
 xlrd>=2.0.1              # .xls（古い形式）
 
+# === コード解析（シンボル検索）。無くても動くが、あるとAIのファイル読解が安定する ===
+tree-sitter>=0.23.0
+tree-sitter-python>=0.23.0
+tree-sitter-javascript>=0.23.0
+tree-sitter-typescript>=0.23.0
+# MATLAB(.m) も解析したい場合のみ追加: pip install -r requirements-symbols.txt
+
 # === RAG（意味検索）。ENABLE_RAG=0 なら不要。torch を含むため重い ===
 chromadb>=0.5.0
 sentence-transformers>=3.0.0
-
-# ※ シンボル解析(tree-sitter)は ABI 依存で環境を選ぶため別ファイルにしています:
-#      pip install -r requirements-symbols.txt
-#    未インストールでも find_symbol 等が無効化されるだけでサーバーは動きます。

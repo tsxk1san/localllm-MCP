@@ -1,3 +1,5 @@
+from __future__ import annotations  # 型注釈を遅延評価に（tree-sitter未導入でも import が通るように）
+
 import json
 import sys
 import hashlib
