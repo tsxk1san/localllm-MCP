@@ -1731,25 +1731,28 @@ def read_symbol(project: str, filepath: str, name: str) -> str:
 
 @mcp.tool()
 def list_projects() -> str:
-    """List available projects in apps and docs."""
+    """利用可能なプロジェクト名の一覧を返す。
+
+    ここで返る「名前」を、他ツールの project 引数にそのまま渡すこと。
+    （"apps" や "docs" はカテゴリ名であってプロジェクト名ではない）
+    """
     apps_projects = _get_projects(APPS_ROOT)
     docs_projects = _get_projects(DOCS_ROOT)
+    all_names = sorted(set(apps_projects) | set(docs_projects))
 
-    output = "Available projects\n\n"
-    output += "apps (editable):\n"
-    for p in apps_projects:
-        tag = " *apps-only" if p in APPS_ONLY_PROJECTS else ""
-        output += f"  - {p}{tag}\n"
+    if not all_names:
+        return "プロジェクトがありません。workspace/apps/<名前>/ にフォルダを作ってください。"
 
-    output += "\ndocs (RAG target):\n"
-    for p in docs_projects:
-        output += f"  - {p}\n"
-
-    only_apps = set(apps_projects) - set(docs_projects) - APPS_ONLY_PROJECTS
-    if only_apps:
-        output += f"\n* apps only (not in docs): {sorted(only_apps)}"
-
-    return output
+    lines = ["利用可能なプロジェクト名（project 引数にはこの名前を指定する）:"]
+    for name in all_names:
+        caps = []
+        if name in apps_projects:
+            caps.append("編集可(apps)")
+        if name in docs_projects and name not in APPS_ONLY_PROJECTS:
+            caps.append("意味検索可(docs)")
+        lines.append(f"  - {name}    [{' / '.join(caps)}]")
+    lines.append('\n例: list_files(project="' + all_names[0] + '")')
+    return "\n".join(lines)
 
 
 # ========================================================
